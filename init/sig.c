@@ -6,28 +6,28 @@ static void		hand_sigint(int	sig)
 	
 	printf("\n");
 	rl_on_new_line();
-	rl_replace_line("", 0);
+	rl_replace_line("", 0); 
 	rl_redisplay();
+}
 
+static void		hand_sigquit(int sig) // TO ADD: DURING A RUNNING PROCESS, QUIT IT
+{
+	(void)sig;
+
+	rl_redisplay();
+}
+
+static void		hand_eof()
+{
+	exit(0);
 }
 
 static void	set_signal_handler(void)
 {
 	signal(SIGINT, hand_sigint);
+	signal(SIGQUIT, hand_sigquit);
 }
 
-int	main(int argc, char **argv, char **envnp)
-{
-	char	*line = NULL;
-
-	(void)argc;
-	(void)argv;
-	(void)envnp;
-	
-	set_signal_handler();
-	while (1) {
-		line = readline("Minishell> ");
-		add_history(line);
-		free(line);
-	}
-}
+// /* EOF */
+// 		if (line == NULL)
+// 			hand_eof();
