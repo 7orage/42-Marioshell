@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-// compiler avce -lreadline
 
 int	main(int argc, char **argv, char **envnp)
 {
