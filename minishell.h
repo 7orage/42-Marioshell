@@ -10,6 +10,10 @@
 # include "includes/get_next_line/get_next_line.h"
 # include "includes/libft/libft.h"
 
+/* PARTS OF CODE*/
+# include "signaux/signaux.h"
+
+
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdlib.h>

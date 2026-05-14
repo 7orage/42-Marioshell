@@ -16,6 +16,7 @@ LIBFT_DIR = includes/libft
 FT_PRINTF_DIR = includes/ft_printf
 NEXT_LINE_DIR   = includes/get_next_line
 
+
 LIBFT     = $(LIBFT_DIR)/libft.a
 FT_PRINTF       = $(FT_PRINTF_DIR)/libftprintf.a
 NEXT_LINE	= $(NEXT_LINE_DIR)/get_next_line.a
@@ -34,14 +35,14 @@ $(NEXT_LINE):
 
 
 $(NAME): $(OBJ) $(LIBFT) $(FT_PRINTF) $(NEXT_LINE)
-	@$(CC) $(CFLAGS) $(RFLAGS) $(OBJ) $(FT_PRINTF) $(NEXT_LINE) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) $(RFLAGS) $(FT_PRINTF) $(NEXT_LINE) $(LIBFT) -o $(NAME)
 	@echo "*******************"
 	@echo "  PROJET COMPILE   "
 	@echo "*******************"
 
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) $(RFLAGS) -I. -I$(LIBFT_DIR) -I$(FT_PRINTF_DIR) -I$(NEXT_LINE_DIR) -c $< -o $@
+	@$(CC) $(CFLAGS) -I. -I$(LIBFT_DIR) -I$(FT_PRINTF_DIR) -I$(NEXT_LINE_DIR) -c $< -o $@
 
 
 clean:
