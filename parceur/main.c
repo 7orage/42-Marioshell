@@ -47,10 +47,18 @@ void    parce(char *input)
             i+= len;
                 //i+= add_node_parceur(TOK_CMD, &input[i], &liste_token);
         }
-       // else if (isop(&input[i]) == 1)
-         //   //i+= add_node_parceur(TOK_OP, &input[i], &liste_token);
+       else if ((len = is_op(&input[i])) > 0)
+       {
+            printf("OP\n");
+            printf("la string :%s\n", &input[i]);
+            i+= len;
+            //i+= add_node_parceur(TOK_OP, &input[i], &liste_token);
+        }   
         else if (input[i] == '\0')
-           return;
+        {
+            //add_node_parceur(TOK_EOF, NULL, &liste_token);
+            return;
+        }
         else
         {
             printf("OBJ\n");

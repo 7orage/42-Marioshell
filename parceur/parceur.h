@@ -40,5 +40,6 @@ int     is_exst(char *token);
 int     is_venv(char *token);
 int     is_cmd(char *token);
 int     is_obj(char *token);
+int     is_op(char *token);
 
 # endif

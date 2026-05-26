@@ -122,7 +122,16 @@ int     is_cmd(char *token)
 }
 
 // IS IT AN OPTION ?
-//isop(&input[i])
+int     is_op(char *token)
+{
+    int     i = 0;
+
+    while (ft_isspace(token[i]) == 1)
+        i++;
+    if (ft_strncmp("-n", &token[i], 2) == 0)
+            return (2);
+    return (0);
+}
 
 // IT IS AN OBJECT (file...) ?
 int     is_obj(char *token)
