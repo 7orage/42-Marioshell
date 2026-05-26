@@ -114,7 +114,7 @@ int     is_cmd(char *token)
     while (cmds[j])
     {
         if (ft_strncmp(cmds[j], &token[i], ft_strlen(cmds[j])) == 0)
-            return (1);
+            return (ft_strlen(cmds[j]));
         else
             j++;
     }
@@ -123,6 +123,20 @@ int     is_cmd(char *token)
 
 // IS IT AN OPTION ?
 //isop(&input[i])
+
+// IT IS AN OBJECT (file...) ?
+int     is_obj(char *token)
+{
+    int     i = 0;
+
+    while (token[i] && ft_isspace(token[i]) == 1)
+        i++;
+    while (token[i] && ft_isspace(token[i]) == 0)
+        i++;
+    while (token[i] && ft_isspace(token[i]) == 1)
+        i++;
+    return (i);
+}
 
 /*
 #include <stdio.h>

@@ -2,6 +2,7 @@
 # define PARCEUR_H
 
 // #include "minishell.h"
+#include "../includes/libft/libft.h"
 # include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -32,9 +33,12 @@ typedef struct s_parceur
 
 
 int	add_node_parceur(token_type type, char *token, parceur **liste);
-
-
-
-
+int     ft_isspace(char c);
+int     is_red(char *token);
+int     is_pipe(char *token);
+int     is_exst(char *token);
+int     is_venv(char *token);
+int     is_cmd(char *token);
+int     is_obj(char *token);
 
 # endif

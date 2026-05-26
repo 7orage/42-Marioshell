@@ -7,7 +7,7 @@ CFLAGS = -Wall -Wextra -Werror -g
 LIBFT_DIR = ../includes/libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-SRC = istype.c 
+SRC = istype.c main.c
 OBJ_DIR = obj
 OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
 
