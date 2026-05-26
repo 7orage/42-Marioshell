@@ -58,7 +58,7 @@ int     is_exst(char *token)
         {
             i += 1;
             if (token[i] == '\0' || ft_isspace(token[i]) == 1 || token[i] == '\'' || token[i] == '"')
-                return (1);
+                return (i);
             else
                 return (0);
             i++;
@@ -84,7 +84,7 @@ int     is_venv(char *token)
             else
             {
                 if (token[i] == '\0' || ft_isspace(token[i]) == 1 || token[i] == '\'' || token[i] == '"')
-                    return (1);
+                    return (i);
                 else
                     return (0);
             }
