@@ -1,15 +1,15 @@
 .SILENT:
-NAME = minishell_parceur
+NAME    = parcing
 
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g
+CC      = gcc
+CFLAGS  = -Wall -Wextra -Werror -g
 
-LIBFT_DIR = ../includes/libft
-LIBFT = $(LIBFT_DIR)/libft.a
+LIBFT_DIR   = includes/libft
+LIBFT       = $(LIBFT_DIR)/libft.a
 
-SRC = istype.c main.c
+SRC     = main.c istype.c parceur.c
 OBJ_DIR = obj
-OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
+OBJ     = $(SRC:%.c=$(OBJ_DIR)/%.o)
 
 INCLUDES = -I. -I$(LIBFT_DIR)
 

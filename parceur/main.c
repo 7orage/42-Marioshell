@@ -1,77 +1,129 @@
-//#include "minishell.h"
-#include "parceur.h"
-#include <stdio.h>
 
+#include "lexeur.h"
 
-void    parce(char *input)
+// CUT THE TOKEN PROPERLY
+char    *cut(char *raw_tok)
 {
+    char buffer[4096];
     int i = 0;
-    int len = 0;
-   // parceur     *liste_token;
-    while (input[i])
+    int j = 0;
+    int is_single = 0;
+    int is_double = 0;
+
+    while (raw_tok[i] && raw_tok[i] != '(' && raw_tok[i] != ')' && raw_tok[i] != '>' && raw_tok[i] != '<' && raw_tok[i] != '|' )
     {
-        while (ft_isspace(input[i]) == 1)
+        if (!is_single && raw_tok[i] == '\'') // tout premier '
+        {
+            is_single = 1;
             i++;
-        if ((len = is_red(&input[i])) > 0)
-        {
-            printf("RED\n");
-            printf("la string :%s\n", &input[i]);
-            i+= len;
-            //i+= add_node_parceur(TOK_RED, &input[i], &liste_token);
         }
-        else if ((len = is_pipe(&input[i])) > 0)
+        else if (!is_double && raw_tok[i] == '"') // tout premier "
         {
-            printf("PIPE\n");
-            printf("la string :%s\n", &input[i]);
-            i+= len;
-            //i+= add_node_parceur(TOK_PIPE, &input[i], &liste_token);
+            is_double = 1;
+            i++;
         }
-        else if ((len = is_exst(&input[i])) > 0)
+        else if (is_single)
         {
-            printf("EXST\n");
-            printf("la string :%s\n", &input[i]);
-            i+= len;
-            //i+= add_node_parceur(TOK_EXST, &input[i], &liste_token);
+            if (raw_tok[i] == '\'')
+            {
+                is_single = 0;
+                i++;
+            }
+            else
+            {
+                buffer[j] = raw_tok[i];
+                i++;
+                j++;
+            }
         }
-        else if ((len = is_venv(&input[i])) > 0)
+        else if (is_double)
         {
-            printf("HENV\n");
-            printf("la string :%s\n", &input[i]);
-            i+= len;
-            //i+= add_node_parceur(TOK_HENV, &input[i], &liste_token);
-        }
-        else if ((len = is_cmd(&input[i])) > 0)
-        {
-            printf("CMD\n");
-            printf("la string :%s\n", &input[i]);
-            i+= len;
-                //i+= add_node_parceur(TOK_CMD, &input[i], &liste_token);
-        }
-       else if ((len = is_op(&input[i])) > 0)
-       {
-            printf("OP\n");
-            printf("la string :%s\n", &input[i]);
-            i+= len;
-            //i+= add_node_parceur(TOK_OP, &input[i], &liste_token);
-        }   
-        else if (input[i] == '\0')
-        {
-            //add_node_parceur(TOK_EOF, NULL, &liste_token);
-            return;
+            if (raw_tok[i] == '$')
+            {
+                i++;//i += find_value();
+            }
+            else if (raw_tok[i] == '\'')
+            {
+                is_double = 0;
+                i++;
+            }
+            else
+            {
+                buffer[j] = raw_tok[i];
+                i++;
+                j++;
+            }
         }
         else
         {
-            printf("OBJ\n");
-            printf("la string :%s\n", &input[i]);          
-            i+= is_obj(&input[i]);
-            //i+= add_node_parceur(TOK_OBJ, &input[i], &liste_token);
+            if (raw_tok[i] == '$')   
+                i++;
+            buffer[j] = raw_tok[i];
+            i++;
+            j++;
         }
     }
+    while (j > 0 && ft_isspace(buffer[j - 1]))
+        j--;
+    buffer[j] = '\0';
+    return (ft_strdup(buffer));
 }
 
-int	main(void)
+void    lexeur(char *input)
 {
-	char    *input = "cd lol.c | echo > lol.c << pwd  $?    $HEYY";
 
-    parce(input);
+    int i = 0;
+    lst_lexer     *head = NULL;
+    while (input[i])
+    {
+        while (ft_isspace(input[i]))
+            i++;
+        if (input[i] == '>')
+        {
+            if (input[i + 1] == '>')
+            {
+                add_node_lexer(&head, TOK_RED_BRS, NULL);
+                i += 1;
+            }
+            else
+                add_node_lexer(&head, TOK_RED_BR, NULL);
+            i += 1;
+        }
+        else if (input[i] == '<')
+        {
+            if (input[i + 1] == '<')
+            {
+                add_node_lexer(&head, TOK_RED_BLS, NULL);
+                i += 1;
+            }
+            else
+                add_node_lexer(&head, TOK_RED_BL, NULL);
+            i += 1;
+        }
+        else if (input[i] == '|')
+        {
+            add_node_lexer(&head, TOK_PIPE, NULL);
+            i += 1;
+        }
+        else if (input[i] == '(')
+        {
+            add_node_lexer(&head, TOK_PAR_L, NULL);
+            i += 1;
+        }
+        else if (input[i] == ')')
+        {
+            add_node_lexer(&head, TOK_PAR_R, NULL);
+            i += 1;
+        }
+        else
+        {
+            char *word = cut(&input[i]);
+            if (!word)
+                return;
+            i += add_node_lexer(&head, TOK_W, word);
+        }
+    }
+    add_node_lexer(&head, TOK_EOF, NULL);
+    print_lexer(head);
+    return;
 }

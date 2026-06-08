@@ -1,4 +1,4 @@
-#include "parceur.h"
+#include "lexeur.h"
 
 // VERIF CONDITION == 1
 int     ft_isspace(char c)
@@ -19,11 +19,11 @@ int     is_red(char *token)
     if (token[i] == '>' || token[i] == '<')
     {
         if (ft_isspace(token[i + 1]) == 1 || token[i + 1] == '\0')
-            return (1);
+            return (i+ 1);
         else if (token[i] == token[i + 1])
         {
             if (ft_isspace(token[i + 2]) == 1 || token[i + 2] == '\0')
-                return (1);
+                return (i + 2);
         }
     }
     return (0);
@@ -61,13 +61,13 @@ int     is_exst(char *token)
                 return (i);
             else
                 return (0);
-            i++;
         }
     }
     return (0);
 }
 
 // IS IT AN ENVIRONMENT VARIABLE ?
+// commenec pas par chiffre!!!
 int     is_venv(char *token)
 {
     int     i = 0;
@@ -79,7 +79,7 @@ int     is_venv(char *token)
         i+= 1;
         while(1)
         {
-            if (token[i] >= 65 && token[i] <= 90)
+            if ((token[i] >= 65 && token[i] <= 90) || (token[i] >= 97 && token[i] <= 122) || (token[i] >= 48 && token[i] <= 57)|| token[i] == 95)
                 i++;
             else
             {
