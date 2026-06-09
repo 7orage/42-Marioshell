@@ -12,6 +12,12 @@
 # include<stdbool.h>
 #include<string.h>
 
+/*  
+
+    POUR EXPAND: déclarer une variable globale "environ" (type: char **)
+
+*/
+
 typedef enum
 {
     TOK_RED_BRS,//>>
@@ -33,12 +39,10 @@ typedef struct s_lst_lexer
     struct s_lst_lexer    *next;
 }               lst_lexer;
 
-// parceur
-char    *cut(char *raw_tok);
+// lexer
 int     add_node_lexer(lst_lexer **liste, token_type type, char *token);
-
-// main
-void    lexeur(char *input);
+char    *cut(char *raw_tok);
+lst_lexer    *lexeur(char *input);
 
 // istype
 int     ft_isspace(char c);
