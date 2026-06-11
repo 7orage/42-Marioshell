@@ -1,5 +1,20 @@
 #include"lexeur.h"
 
+// FREE THE LIST
+void	free_lexer(lst_lexer *head)
+{
+	lst_lexer	*ptr;
+
+	while (head)
+	{
+		ptr = head->next;
+        if (head->value)
+		    free(head->value);
+        free(head);
+		head = ptr;
+	}
+}
+
 // ADD A NEW TOKEN TO THE LISTE
 int	add_node_lexer(lst_lexer **liste, token_type type, char *token)
 {
@@ -28,6 +43,13 @@ int	add_node_lexer(lst_lexer **liste, token_type type, char *token)
     	return (1);
 	else
 		return (ft_strlen(new->value));
+}
+
+int     expand_var(char *buffer)
+{
+    // $HOME        → chercher "HOME" dans env, retourner la valeur
+    // $?           → retourner le exit status
+    // $INEXISTANT  → retourner ""
 }
 
 // CUT THE TOKEN PROPERLY
@@ -134,21 +156,11 @@ lst_lexer    *lexeur(char *input)
             add_node_lexer(&head, TOK_PIPE, NULL);
             i += 1;
         }
-        else if (input[i] == '(')
-        {
-            add_node_lexer(&head, TOK_PAR_L, NULL);
-            i += 1;
-        }
-        else if (input[i] == ')')
-        {
-            add_node_lexer(&head, TOK_PAR_R, NULL);
-            i += 1;
-        }
         else
         {
             char *word = cut(&input[i]);
             if (!word)
-                return NULL;
+                return (free_lexer(head), NULL);
             i += add_node_lexer(&head, TOK_W, word);
         }
     }

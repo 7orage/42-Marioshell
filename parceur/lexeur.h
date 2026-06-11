@@ -2,7 +2,7 @@
 # define LEXEUR_H
 
 // #include "minishell.h"
-#include"includes/libft/libft.h"
+#include"../includes/libft/libft.h"
 #include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -25,8 +25,6 @@ typedef enum
     TOK_RED_BR, //>
     TOK_RED_BL, //<
     TOK_PIPE,   //Pipes |
-    TOK_PAR_L,  //(
-    TOK_PAR_R,  //)
     TOK_W,      //Commands, op, env, $? and obj
     TOK_EOF,
 }               token_type;
@@ -40,6 +38,7 @@ typedef struct s_lst_lexer
 }               lst_lexer;
 
 // lexer
+void	free_lexer(lst_lexer *head);
 int     add_node_lexer(lst_lexer **liste, token_type type, char *token);
 char    *cut(char *raw_tok);
 lst_lexer    *lexeur(char *input);

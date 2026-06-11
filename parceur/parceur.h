@@ -24,14 +24,13 @@
 		-> si on arrive sur |   alors on cree nv noeud parent de l'AST et ajout ce qu'il y a à gauche/droite
 		-> si on arrive sur red alors de meme creer nv noeud parent de l'AST et inclure droite/gauche 
 
+		ABANDON NOEUD EOF AST
 */
 typedef enum
 {
     N_RED,     //Redirections
     N_PIPE,   //Pipe |
-    N_PAR,    //Parenthesis
-    N_CMD,      //Commands, op, env, $? and obj
-    N_EOF
+    N_CMD      //Commands, op, env, $? and obj
 }               node_type;
 
 typedef struct s_lst_ast
@@ -45,8 +44,18 @@ typedef struct s_lst_ast
 }              lst_ast;
 
 // parceur
+void	free_tab(char **tab);
+void	free_parceur(lst_ast *head);
+lst_ast	*find_cmd(lst_lexer **head);
+lst_ast	*find_red(lst_lexer **head);
+lst_ast	*find_pipe(lst_lexer **head);
+lst_ast	*create_ast(lst_lexer **liste);
 
-// print
+/*
+
+// print ast
 void    print_ast(lst_ast *root);
+
+*/
 
 #endif

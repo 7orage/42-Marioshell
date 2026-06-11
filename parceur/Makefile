@@ -4,7 +4,7 @@ NAME    = parcing
 CC      = gcc
 CFLAGS  = -Wall -Wextra -Werror -g
 
-LIBFT_DIR   = includes/libft
+LIBFT_DIR   = ../includes/libft
 LIBFT       = $(LIBFT_DIR)/libft.a
 
 SRC     = main.c istype.c lexer.c parceur.c
@@ -16,7 +16,7 @@ INCLUDES = -I. -I$(LIBFT_DIR)
 all: $(LIBFT) $(NAME)
 
 $(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)  --no-print-directory
+	$(MAKE) -C $(LIBFT_DIR) --no-print-directory
 
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
