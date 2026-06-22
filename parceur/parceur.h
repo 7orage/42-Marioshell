@@ -2,6 +2,7 @@
 # define PARCEUR_H
 
 #include"lexeur.h"
+#include"envp_list.h"
 
 
 /* PRIORITES
@@ -20,7 +21,6 @@
 		!! AJOUTER MESSAGES ERREURS 
 		!! DIFFERENCIER CMD DE NOM FICHIER ECT
 
-		-> si on arrive sur ()  alors backtracking, on renvoit à l'algo principal, pour refaire meme procede
 		-> si on arrive sur |   alors on cree nv noeud parent de l'AST et ajout ce qu'il y a à gauche/droite
 		-> si on arrive sur red alors de meme creer nv noeud parent de l'AST et inclure droite/gauche 
 
@@ -51,11 +51,10 @@ lst_ast	*find_red(lst_lexer **head);
 lst_ast	*find_pipe(lst_lexer **head);
 lst_ast	*create_ast(lst_lexer **liste);
 
-/*
+
 
 // print ast
 void    print_ast(lst_ast *root);
 
-*/
 
 #endif

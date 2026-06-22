@@ -3,6 +3,8 @@
 
 // #include "minishell.h"
 #include"../includes/libft/libft.h"
+#include"envp_list.h"
+
 #include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -40,8 +42,8 @@ typedef struct s_lst_lexer
 // lexer
 void	free_lexer(lst_lexer *head);
 int     add_node_lexer(lst_lexer **liste, token_type type, char *token);
-char    *cut(char *raw_tok);
-lst_lexer    *lexeur(char *input);
+char    *cut(char *raw_tok, t_env *env, int *i);
+lst_lexer    *lexeur(char *input, t_env *env);
 
 // istype
 int     ft_isspace(char c);

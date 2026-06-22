@@ -40,7 +40,7 @@ void	free_tab(char **tab)
 void	free_parceur(lst_ast *head)
 {
 	if (!head)
-		return NULL;
+		return ;
 	if (head->left)
 		free_parceur(head->left);
 	if (head->right)
@@ -100,6 +100,7 @@ lst_ast	*find_red(lst_lexer **head)
 	}
 	else
 		return (free_parceur(node_ast), node_left);
+	return (free_parceur(node_ast), node_left);
 }
 
 lst_ast	*find_pipe(lst_lexer **head)
@@ -121,9 +122,3 @@ lst_ast	*find_pipe(lst_lexer **head)
 	return (node_ast);
 }
 
-lst_ast	*create_ast(lst_lexer **liste)
-{
-	lst_ast	*head = find_pipe(liste);
-	free_lexer(*liste);
-	return (head);
-}

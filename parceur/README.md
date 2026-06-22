@@ -53,7 +53,9 @@ Découpage, brainsto de la fonction cut:
     // /home/laura
     //➜  minishell git:(parcing) ✗ echo '$HOME'
     // $HOME
-
+    //-> bash-5.2$ echo $HOME
+    // /home/lheteau
+    
     // ➜  minishell git:(parcing) ✗ echo "hello"
     // hello
     // ➜  minishell git:(parcing) ✗ echo 'hello'
