@@ -44,24 +44,7 @@ int	add_node_lexer(lst_lexer **liste, token_type type, char *token)
 	else
 		return (ft_strlen(new->value));
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*
 
 char     *expand_var(char *buffer, t_env *env) // rien de tout ca 
 {
@@ -96,37 +79,19 @@ int     main(int argc, char **argv, char **envp)
 	env = envp_list(envp);
     char *result = cut(" '$HOME'  ", env, &i);
     printf("%s\n%d\n", result, i);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}*/
 
 // CUT THE TOKEN PROPERLY
-char    *cut(char *raw_tok, t_env *env, int *initial_i) // attention pdt lexpand a bien renvoyer le bon nb de i
+char    *cut(char *raw_tok, t_env *env, int *initial_i)
 {
-    char buffer[4000];
+    (void)env;
+    char buffer[4096];
     int i = 0;
     int j = 0;
     int is_single = 0;
     int is_double = 0;
 
-    while (raw_tok[i] && raw_tok[i] != '>' && raw_tok[i] != '<' && raw_tok[i] != '|' )
+    while (raw_tok[i] && raw_tok[i] != '(' && raw_tok[i] != ')' && raw_tok[i] != '>' && raw_tok[i] != '<' && raw_tok[i] != '|' )
     {
         if (!is_single && raw_tok[i] == '\'') // tout premier '
         {
@@ -144,8 +109,8 @@ char    *cut(char *raw_tok, t_env *env, int *initial_i) // attention pdt lexpand
             {
                 is_single = 0;
                 i++;
-                initial_i += i;
-                return (buffer);
+                *initial_i += i;
+                return(ft_strdup(buffer));
             }
             else
             {
@@ -158,14 +123,14 @@ char    *cut(char *raw_tok, t_env *env, int *initial_i) // attention pdt lexpand
         {
             if (raw_tok[i] == '$')
             {
-                                                      // Expand !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                i++;//i += find_value(); // EXPANNNND!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             }
-            else if (raw_tok[i] == '\"')
+            else if (raw_tok[i] == '\'')
             {
                 is_double = 0;
                 i++;
-                initial_i += i;
-                return (buffer);
+                *initial_i += i;
+                return (ft_strdup(buffer));
             }
             else
             {
@@ -178,19 +143,19 @@ char    *cut(char *raw_tok, t_env *env, int *initial_i) // attention pdt lexpand
         {
             if (raw_tok[i] == '$')
             {
-                char    *result_env;
-                result_env = expand_var(&raw_tok[i], env); //expand!!!!!!!!!!!!!!!!!!!!!!!!!!
-                while (raw_tok[i] != ' ' || raw_tok[i] != '\0')
+                char *result_env;
+                result_env = expand_var(&raw_tok[i], env);////EXPAND!!!!!!!!!!!!!!!!!!!!!!!!!
+                while (raw_tok[i] != ' ' || raw_tok[i] != '\0')   
                     i++;
                 initial_i += i;
-                return (ft_strdup(buffer));
+                return (result_env);
             }
-
         }
     }
     while (j > 0 && ft_isspace(buffer[j - 1]))
         j--;
     buffer[j] = '\0';
+    *initial_i += i;
     return (ft_strdup(buffer));
 }
 

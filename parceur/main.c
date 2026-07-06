@@ -15,7 +15,9 @@ int		main(int argc, char **argv, char **envp)
 	t_env *env;
 
 	env = envp_list(envp);
-	lst_lexer *head = lexeur("echo  | cat -n > file.txt", env);
+	lst_lexer *head = lexeur("echo Makefile | ", env);
+	
 	lst_ast *ast = create_ast(&head);
+	
 	print_ast(ast);
 }

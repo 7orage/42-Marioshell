@@ -91,12 +91,15 @@ lst_ast	*find_red(lst_lexer **head)
 	node_left = find_cmd(head);
 	if ((*head)->type == TOK_RED_BR || (*head)->type == TOK_RED_BL || (*head)->type == TOK_RED_BRS || (*head)->type == TOK_RED_BLS)
 	{
+		node_ast->tokens = NULL;
+		if ((*head)->value)
+			node_ast->red_file = ft_strdup((*head)->value);
+		node_ast->node_type = N_RED;
 		node_ast->token_type = (*head)->type;
 		(*head) = (*head)->next;
-		node_ast->red_file = ft_strdup((*head)->value);
-		node_ast->node_type = N_RED;
 		node_ast->left = node_left;
 		(*head) = (*head)->next;
+		return (node_left);
 	}
 	else
 		return (free_parceur(node_ast), node_left);
@@ -111,8 +114,10 @@ lst_ast	*find_pipe(lst_lexer **head)
 	node_left = find_red(head);
 	if ((*head)->type == TOK_PIPE)
 	{
-		node_ast->token_type = (*head)->type;
+		node_ast->tokens = NULL;
+		node_ast->red_file = NULL;
 		node_ast->node_type = N_PIPE;
+		node_ast->token_type = (*head)->type;
 		node_ast->left = node_left;
 		(*head) = (*head)->next;
 		node_ast->right = find_pipe(head);

@@ -2,7 +2,7 @@
 NAME    = parcing
 
 CC      = gcc
-CFLAGS  = -Wall -Wextra -Werror -g
+CFLAGS  = -Wall -Wextra -Werror -g3
 
 LIBFT_DIR   = ../includes/libft
 LIBFT       = $(LIBFT_DIR)/libft.a
