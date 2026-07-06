@@ -1,6 +1,7 @@
 #include"lexeur.h"
 
 // FREE THE LIST
+/*
 void	free_lexer(lst_lexer *head)
 {
 	lst_lexer	*ptr;
@@ -43,8 +44,8 @@ int	add_node_lexer(lst_lexer **liste, token_type type, char *token)
     	return (1);
 	else
 		return (ft_strlen(new->value));
-}
-/*
+}*/
+
 
 char     *expand_var(char *buffer, t_env *env) // rien de tout ca 
 {
@@ -69,6 +70,8 @@ char     *expand_var(char *buffer, t_env *env) // rien de tout ca
     return ("");
 }
 
+char    *cut(char *raw_tok, t_env *env, int *initial_i);
+
 int     main(int argc, char **argv, char **envp)
 {
     (void)argv;
@@ -77,9 +80,9 @@ int     main(int argc, char **argv, char **envp)
     int     i = 0;
 
 	env = envp_list(envp);
-    char *result = cut(" '$HOME'  ", env, &i);
+    char *result = cut(" $HOME  ", env, &i);
     printf("%s\n%d\n", result, i);
-}*/
+}
 
 // CUT THE TOKEN PROPERLY
 char    *cut(char *raw_tok, t_env *env, int *initial_i)
@@ -143,13 +146,18 @@ char    *cut(char *raw_tok, t_env *env, int *initial_i)
         {
             if (raw_tok[i] == '$')
             {
-                char *result_env;
-                result_env = expand_var(&raw_tok[i], env);////EXPAND!!!!!!!!!!!!!!!!!!!!!!!!!
+                //char *result_env;
+                //result_env = expand_var(&raw_tok[i], env);////EXPAND!!!!!!!!!!!!!!!!!!!!!!!!!
+                printf("hey\n");
                 while (raw_tok[i] != ' ' || raw_tok[i] != '\0')   
                     i++;
                 initial_i += i;
-                return (result_env);
+                return (NULL)
+                //return (result_env);
             }
+            else
+                i++;
+
         }
     }
     while (j > 0 && ft_isspace(buffer[j - 1]))
@@ -158,7 +166,7 @@ char    *cut(char *raw_tok, t_env *env, int *initial_i)
     *initial_i += i;
     return (ft_strdup(buffer));
 }
-
+/*
 lst_lexer    *lexeur(char *input, t_env *env)
 {
 
@@ -206,3 +214,4 @@ lst_lexer    *lexeur(char *input, t_env *env)
     add_node_lexer(&head, TOK_EOF, NULL);
     return (head);
 }
+*/
