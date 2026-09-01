@@ -1,6 +1,9 @@
 
 #include "parceur.h"
 
+//tester expansion : 	lst_lexer *head = lexeur("echo $HOME 'a$HOME' \"b$HOME\"", env);
+
+
 lst_ast	*create_ast(lst_lexer **liste)
 {
 	lst_ast	*head = find_pipe(liste);
@@ -15,7 +18,7 @@ int		main(int argc, char **argv, char **envp)
 	t_env *env;
 
 	env = envp_list(envp);
-	lst_lexer *head = lexeur("echo Makefile | ", env);
+	lst_lexer *head = lexeur("echo $HOME 'a$HOME' \"b$HOME\" $?", env);
 	
 	lst_ast *ast = create_ast(&head);
 	

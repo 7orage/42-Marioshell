@@ -1,5 +1,13 @@
 #include "lexeur.h"
 
+//VERIF < > ou |
+int	is_delim(char c)
+{
+	if (c == '|' || c == '<' || c == '>')
+		return (1);
+	return (0);
+}
+
 // VERIF CONDITION == 1
 int     ft_isspace(char c)
 {

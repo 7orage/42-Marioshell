@@ -40,12 +40,14 @@ typedef struct s_lst_lexer
 }               lst_lexer;
 
 // lexer
+int		check_quotes(char *input);
 void	free_lexer(lst_lexer *head);
 int     add_node_lexer(lst_lexer **liste, token_type type, char *token);
 char    *cut(char *raw_tok, t_env *env, int *i);
 lst_lexer    *lexeur(char *input, t_env *env);
 
 // istype
+int	is_delim(char c);
 int     ft_isspace(char c);
 int     is_red(char *token);
 int     is_pipe(char *token);
@@ -55,4 +57,7 @@ int     is_cmd(char *token);
 int     is_obj(char *token);
 int     is_op(char *token);
 
+// expand
+int		expand(char *raw, char *buffer, int *j, t_env *env);
+char	*env_get(t_env *env, char *name, int len);
 # endif
