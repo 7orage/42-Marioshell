@@ -1,95 +1,67 @@
 #include "parceur.h"
 
-/* PRIORITES
-
-	() > Red > Pipe
-
-	donc pour une ligne: "echo hello | cat > file.txt", on a 
-	[TOK_W:"echo"] [TOK_W:"hello"] [TOK_PIPE] [TOK_W:"cat"] [TOK_RED_BR] [TOK_W:"file.txt"] [TOK_EOF]
-
-				Pipe
-		echo			Red
-		hello 	// cat		file.txt
-
-		--> On parcour la ligne: de gauche à droite 
-		!! CHANGER PROTO LST_LEXER, AJOUTER NOEUD PRECEDENT
-		!! AJOUTER MESSAGES ERREURS 
-		!! DIFFERENCIER CMD DE NOM FICHIER ECT
-
-		-> si on arrive sur |   alors on cree nv noeud parent de l'AST et ajout ce qu'il y a à gauche/droite
-		-> si on arrive sur red alors de meme creer nv noeud parent de l'AST et inclure droite/gauche 
-
+/*
+count_words	-> [find_cmd] COUNNT THE WORDS
+fill_tokens	-> [find_cmd] COPY THEM
+find_cmd	-> FIND A COMAND
+find_red	-> FIND A REDIRECTION
+find_pipe	-> FIND A PIPE
 */
 
-void	free_tab(char **tab)
+static int	count_words(t_lst_lexer *current)
 {
 	int	i;
 
 	i = 0;
-	if (tab == NULL)
-		return ;
-	while (tab[i])
+	while (current && current->type == TOK_W)
 	{
-		if (tab[i] != NULL)
-			free(tab[i]);
 		i++;
+		current = current->next;
 	}
-	free(tab);
+	return (i);
 }
 
-void	free_parceur(t_lst_ast *head)
+static char	**fill_tokens(t_lst_lexer **head, int count)
 {
-	if (!head)
-		return ;
-	if (head->left)
-		free_parceur(head->left);
-	if (head->right)
-		free_parceur(head->right);
-	if (head->tokens)
-		free_tab(head->tokens);
-	if (head->red_file)
-		free(head->red_file);
-	free(head);
-}
-
-t_lst_ast	*find_cmd(lst_lexer **head)
-{
-	lst_lexer		*current = *head;
-	t_lst_ast	*node_ast = ft_calloc(sizeof(t_lst_ast), 1);
 	char	**tokens;
-	int		i = 0;
-	int		j = 0;
+	int		j;
 
+	tokens = ft_calloc(count + 1, sizeof(char *));
+	if (!tokens)
+		return (NULL);
+	j = 0;
+	while (j < count)
+	{
+		tokens[j] = ft_strdup((*head)->value);
+		*head = (*head)->next;
+		j++;
+	}
+	return (tokens);
+}
+
+t_lst_ast	*find_cmd(t_lst_lexer **head)
+{
+	t_lst_ast	*node_ast;
+	int			count;
+
+	node_ast = ft_calloc(1, sizeof(t_lst_ast));
+	if (!node_ast)
+		return (NULL);
 	node_ast->node_type = N_CMD;
 	node_ast->token_type = TOK_W;
-	node_ast->right = NULL;
-	node_ast->left = NULL;
-	while (current->type == TOK_W)
-	{
-		i++;
-		current = current->next;
-	}
-	tokens = ft_calloc(i + 1, sizeof(char *));
-	current = *head;
-	while(i > 0)
-	{
-		tokens[j] = ft_strdup(current->value);
-		current = current->next;
-		j++;
-		i--;
-	}
-	node_ast->tokens = tokens;
-	*head = current;
+	count = count_words(*head);
+	node_ast->tokens = fill_tokens(head, count);
 	return (node_ast);
 }
 
-t_lst_ast	*find_red(lst_lexer **head)
+t_lst_ast	*find_red(t_lst_lexer **head)
 {
 	t_lst_ast	*node_left;
 	t_lst_ast	*node_ast;
 
 	node_left = find_cmd(head);
-	if ((*head)->type == TOK_RED_BR || (*head)->type == TOK_RED_BL || (*head)->type == TOK_RED_BRS || (*head)->type == TOK_RED_BLS)
+	if ((*head)->type == TOK_RED_BR || (*head)->type == TOK_RED_BL
+		|| (*head)->type == TOK_RED_BRS || (*head)->type == TOK_RED_BLS)
 	{
 		node_ast = ft_calloc(sizeof(t_lst_ast), 1);
 		if (!node_ast)
@@ -108,23 +80,21 @@ t_lst_ast	*find_red(lst_lexer **head)
 	return (node_left);
 }
 
-t_lst_ast	*find_pipe(lst_lexer **head)
+t_lst_ast	*find_pipe(t_lst_lexer **head)
 {
 	t_lst_ast	*node_left;
-	t_lst_ast	* const node_ast = ft_calloc(sizeof(t_lst_ast), 1);
+	t_lst_ast	*node_ast;
 
 	node_left = find_red(head);
-	if ((*head)->type == TOK_PIPE)
-	{
-		node_ast->tokens = NULL;
-		node_ast->red_file = NULL;
-		node_ast->node_type = N_PIPE;
-		node_ast->token_type = (*head)->type;
-		node_ast->left = node_left;
-		(*head) = (*head)->next;
-		node_ast->right = find_pipe(head);
-	}
-	else
-		return (free_parceur(node_ast), node_left); 
+	if (!*head || (*head)->type != TOK_PIPE)
+		return (node_left);
+	node_ast = ft_calloc(1, sizeof(t_lst_ast));
+	if (!node_ast)
+		return (free_parceur(node_left), NULL);
+	node_ast->node_type = N_PIPE;
+	node_ast->token_type = (*head)->type;
+	node_ast->left = node_left;
+	*head = (*head)->next;
+	node_ast->right = find_pipe(head);
 	return (node_ast);
 }

@@ -9,7 +9,7 @@ LIBFT       = $(LIBFT_DIR)/libft.a
 
 SRC     = envp_list.c istype.c\
 			lexer.c lexer_lst.c lexer_cut.c expand.c \
-			parceur.c \
+			parceur.c parceur_free.c\
 			main.c print_ast.c
 OBJ_DIR = obj
 OBJ     = $(SRC:%.c=$(OBJ_DIR)/%.o)

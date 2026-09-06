@@ -13,7 +13,7 @@
 # include <stdbool.h>
 # include <string.h>
 
-typedef enum
+typedef enum e_token
 {
 	TOK_RED_BRS,//>>
 	TOK_RED_BLS,//<<
@@ -22,11 +22,11 @@ typedef enum
 	TOK_PIPE, //Pipes |
 	TOK_W, //Commands, op, env, $? and obj
 	TOK_EOF,
-}		token_type;
+}		t_token_type;
 
-typedef struct	s_lst_lexer
+typedef struct s_lst_lexer
 {
-	token_type			type;
+	t_token_type		type;
 	char				*value;
 	struct s_lst_lexer	*next;
 }				t_lst_lexer;
@@ -39,10 +39,10 @@ char		*cut(char *raw_tok, t_env *env, int *initial_i);
 
 //lexer_lst.c
 void		free_lexer(t_lst_lexer *head);
-int			add_node_lexer(t_lst_lexer **liste, token_type type, char *token);
+int			add_node_lexer(t_lst_lexer **liste, t_token_type type, char *token);
 
 //istype.c
-int	is_quotes_closed(char *input);
+int			is_quotes_closed(char *input);
 int			is_delim(char c);
 int			ft_isspace(char c);
 
@@ -50,4 +50,4 @@ int			ft_isspace(char c);
 int			expand(char *raw, char *buffer, int *j, t_env *env);
 char		*env_get(t_env *env, char *name, int len);
 
-# endif
+#endif

@@ -1,6 +1,6 @@
 #include "parceur.h"
 
-static const char *node_type_str(s_node_type type)
+static const char *node_type_str(t_node_type type)
 {
 	if (type == N_RED)  return "N_RED";
 	if (type == N_PIPE) return "N_PIPE";
