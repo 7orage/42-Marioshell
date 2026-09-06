@@ -42,15 +42,9 @@ void		free_lexer(t_lst_lexer *head);
 int			add_node_lexer(t_lst_lexer **liste, token_type type, char *token);
 
 //istype.c
-int	is_delim(char c);
-int     ft_isspace(char c);
-int     is_red(char *token);
-int     is_pipe(char *token);
-int     is_exst(char *token);
-int     is_venv(char *token);
-int     is_cmd(char *token);
-int     is_obj(char *token);
-int     is_op(char *token);
+int	is_quotes_closed(char *input);
+int			is_delim(char c);
+int			ft_isspace(char c);
 
 // expand.c
 int		expand(char *raw, char *buffer, int *j, t_env *env);

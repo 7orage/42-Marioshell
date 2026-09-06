@@ -1,5 +1,11 @@
 #include "lexeur.h"
 
+/*
+is_quotes_closed	-> IS THE QUOTES CLOSED ?
+is_delim			-> IS IT A '|' || '<' || '>' ?
+ft_isspace			-> IS IT A SPACE ?
+*/
+
 int	is_quotes_closed(char *input)
 {
 	int		i;
@@ -20,7 +26,6 @@ int	is_quotes_closed(char *input)
 	return (1);
 }
 
-//VERIF < > ou |
 int	is_delim(char c)
 {
 	if (c == '|' || c == '<' || c == '>')
@@ -28,8 +33,7 @@ int	is_delim(char c)
 	return (0);
 }
 
-// VERIF CONDITION == 1
-int     ft_isspace(char c)
+int	ft_isspace(char c)
 {
 	if ((c >= 9 && c <= 13) || c == ' ')
 		return (1);
