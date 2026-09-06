@@ -1,5 +1,15 @@
 /* A REPASSER AVANT FINAL
 -norminette
+
+envp
+lexeur cut OKKKKKKKKKKKKKKK
+lexeur lst
+lexeur
+expand
+istype
+parceur 
+
+- verif leaks 
 */
 
 /* NORMINETTE

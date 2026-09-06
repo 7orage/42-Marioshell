@@ -84,16 +84,3 @@ void	print_list(t_env *env)
 		printf("%s\n%s\n\n", temp->name, temp->content);
 	}
 }
-/*
-int	main(int argc, char **argv, char **envp)
-{
-	t_env	*env;
-
-	(void)argc;
-	(void)argv;
-	env = envp_list(envp);
-	print_list(env);
-	free_list(env);
-	return (1);
-}
-*/

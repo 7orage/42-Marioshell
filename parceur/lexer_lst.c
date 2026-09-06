@@ -1,7 +1,6 @@
 #include "lexeur.h"
 
 // FREE THE LIST
-
 void	free_lexer(lst_lexer *head)
 {
 	lst_lexer	*ptr;
