@@ -1,18 +1,13 @@
 #include "lexeur.h"
 
 /*
-		'...' aucune expansion (expand() n'est jamais appelee)
-		"..." expansion, identique a hors quotes
-		$NAME NAME = [A-Za-z_][A-Za-z0-9_]*, inexistante = vide
-		$?	 exit status
-		$1..$9 parametre positionnel = vide
-		$ seul le '$' reste litteral
+bufdup		-> COPY STR IN BUFFER
+varlen		-> STRLEN OF THE VAR
+find_env	-> FIND THE VAR IN THE LIST
+expand		-> MANAGE EXPAND
 */
 
-# define BUF_MAX 4096
-
-// AJOUTE s DANS buffer A PARTIR DE *j (borne sur BUF_MAX)
-static void	buf_add_str(char *buffer, int *j, char *s)
+static void	bufdup(char *buffer, int *j, char *s)
 {
 	int	k;
 
@@ -27,8 +22,7 @@ static void	buf_add_str(char *buffer, int *j, char *s)
 	}
 }
 
-// LONGUEUR DU NOM DE VARIABLE QUI SUIT LE '$' (s pointe sur le '$')
-static int	var_len(char *s)
+static int	varlen(char *s)
 {
 	int	k;
 
@@ -40,8 +34,7 @@ static int	var_len(char *s)
 	return (k - 1);
 }
 
-// CHERCHE UNE VARIABLE DANS L'ENV (match exact sur len caracteres)
-char	*env_get(t_env *env, char *name, int len)
+char	*find_env(t_env *env, char *name, int len)
 {
 	while (env)
 	{
@@ -52,7 +45,6 @@ char	*env_get(t_env *env, char *name, int len)
 	return (NULL);
 }
 
-// EXPANSE LE '$' SUR LEQUEL raw POINTE, RETOURNE LE NB DE CHARS CONSOMMES
 int	expand(char *raw, char *buffer, int *j, t_env *env)
 {
 	int		len;
@@ -60,16 +52,16 @@ int	expand(char *raw, char *buffer, int *j, t_env *env)
 
 	if (raw[1] == '?')
 	{
-		value = env_get(env, "?", 1);
+		value = find_env(env, "?", 1);
 		if (!value)
 			value = "0";
-		return (buf_add_str(buffer, j, value), 2);
+		return (bufdup(buffer, j, value), 2);
 	}
 	if (ft_isdigit(raw[1]))
 		return (2);
-	len = var_len(raw);
+	len = varlen(raw);
 	if (len == 0)
-		return (buf_add_str(buffer, j, "$"), 1);
-	buf_add_str(buffer, j, env_get(env, raw + 1, len));
+		return (bufdup(buffer, j, "$"), 1);
+	bufdup(buffer, j, find_env(env, raw + 1, len));
 	return (len + 1);
 }

@@ -1,14 +1,4 @@
 /* A REPASSER AVANT FINAL
--norminette
-
-envp       OKKKKKKKKKKKKKKK
-lexeur cut OKKKKKKKKKKKKKKK
-lexeur lst OKKKKKKKKKKKKKKK
-lexeur     OKKKKKKKKKKKKKKK
-expand
-istype     OKKKKKKKKKKKKKKK
-parceur 
-
 - verif leaks 
 */
 
@@ -26,6 +16,15 @@ cat f | grep a | wc -l
 cat < in.txt | grep x > res.txt	
 > out.txt
 echo hi >
+*/
+
+/* EXPAND
+	'' pas expansion
+	"" expansion
+	$NAME NAME = [A-Za-z_][A-Za-z0-9_]*, inexistante = vide
+	$?	 exit status
+	$1..$9 parametre positionnel = vide
+	$ seul le '$' reste litteral
 */
 *********************************************************
 

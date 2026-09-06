@@ -1,6 +1,8 @@
 #ifndef LEXEUR_H
 # define LEXEUR_H
 
+# define BUF_MAX 4096
+
 # include "../includes/libft/libft.h"
 # include "envp_list.h"
 
@@ -47,7 +49,7 @@ int			is_delim(char c);
 int			ft_isspace(char c);
 
 // expand.c
+char		*find_env(t_env *env, char *name, int len);
 int			expand(char *raw, char *buffer, int *j, t_env *env);
-char		*env_get(t_env *env, char *name, int len);
 
 #endif
