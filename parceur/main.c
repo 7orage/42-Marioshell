@@ -1,10 +1,9 @@
-
 #include "parceur.h"
 
 //tester expansion : 	lst_lexer *head = lexeur("echo $HOME 'a$HOME' \"b$HOME\"", env);
 
 
-t_lst_ast	*create_ast(lst_lexer **liste)
+t_lst_ast	*create_ast(t_lst_lexer **liste)
 {
 	t_lst_ast	*head = find_pipe(liste);
 	free_lexer(*liste);
@@ -18,7 +17,7 @@ int		main(int argc, char **argv, char **envp)
 	t_env *env;
 
 	env = envp_list(envp);
-	lst_lexer *head = lexer("echo 'coucou' > text.txt | echo hi >", env);
+	t_lst_lexer *head = lexer("echo 'coucou' > text.txt | echo hi >", env);
 	
 	t_lst_ast *ast = create_ast(&head);
 	

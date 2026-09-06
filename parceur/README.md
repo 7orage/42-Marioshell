@@ -1,12 +1,12 @@
 /* A REPASSER AVANT FINAL
 -norminette
 
-envp
+envp       OKKKKKKKKKKKKKKK
 lexeur cut OKKKKKKKKKKKKKKK
-lexeur lst
-lexeur
+lexeur lst OKKKKKKKKKKKKKKK
+lexeur     OKKKKKKKKKKKKKKK
 expand
-istype
+istype     OKKKKKKKKKKKKKKK
 parceur 
 
 - verif leaks 
