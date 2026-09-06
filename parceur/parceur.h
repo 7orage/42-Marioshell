@@ -26,8 +26,6 @@ void			free_tab(char **tab);
 void			free_parceur(t_lst_ast *head);
 
 //parceur.c
-static int		count_words(t_lst_lexer *current);
-static char		**fill_tokens(t_lst_lexer **head, int count);
 t_lst_ast		*find_cmd(t_lst_lexer **head);
 t_lst_ast		*find_red(t_lst_lexer **head);
 t_lst_ast		*find_pipe(t_lst_lexer **head);

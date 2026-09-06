@@ -1,5 +1,12 @@
 #include "parceur.h"
 
+/*
+new_list		-> ADD A NODE
+insert_end_list	-> PUT THE NODE AT THE END
+free_list		-> FREE THE LIST
+envp_list		-> ENVP LIST MANAGE
+*/
+
 static t_env	*new_list(char *name, char *content)
 {
 	t_env	*new;
@@ -71,16 +78,4 @@ t_env	*envp_list(char **envp)
 		i++;
 	}
 	return (env);
-}
-
-void	print_list(t_env *env)
-{
-	t_env	*temp;
-
-	while (env)
-	{
-		temp = env;
-		env = env->next;
-		printf("%s\n%s\n\n", temp->name, temp->content);
-	}
 }
