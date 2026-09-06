@@ -1,8 +1,8 @@
 #ifndef PARCEUR_H 
 # define PARCEUR_H
 
-#include"lexeur.h"
-#include"envp_list.h"
+# include "lexeur.h"
+# include "envp_list.h"
 
 
 /* PRIORITES
@@ -26,35 +26,32 @@
 
 		ABANDON NOEUD EOF AST
 */
-typedef enum
-{
-    N_RED,     //Redirections
-    N_PIPE,   //Pipe |
-    N_CMD      //Commands, op, env, $? and obj
-}               node_type;
 
-typedef struct s_lst_ast
+typedef enum	e_node_type
 {
-    char            **tokens;
-    char            *red_file;
-    node_type       node_type;
-    token_type      token_type;
-    struct s_lst_ast    *right;
-    struct s_lst_ast    *left;
-}              lst_ast;
+	N_RED,//Redirections
+	N_PIPE,//Pipe
+	N_CMD//Commands, op, env, $? and obj
+}				s_node_type;
+
+typedef struct	s_lst_ast
+{
+	char				**tokens;
+	char				*red_file;
+	s_node_type			node_type;
+	token_type			token_type;
+	struct s_lst_ast	*right;
+	struct s_lst_ast	*left;
+}				t_lst_ast;
 
 // parceur
-void	free_tab(char **tab);
-void	free_parceur(lst_ast *head);
-lst_ast	*find_cmd(lst_lexer **head);
-lst_ast	*find_red(lst_lexer **head);
-lst_ast	*find_pipe(lst_lexer **head);
-lst_ast	*create_ast(lst_lexer **liste);
-
-
-
+void			free_tab(char **tab);
+void			free_parceur(t_lst_ast *head);
+t_lst_ast		*find_cmd(lst_lexer **head);
+t_lst_ast		*find_red(lst_lexer **head);
+t_lst_ast		*find_pipe(lst_lexer **head);
+t_lst_ast		*create_ast(lst_lexer **liste);
 // print ast
-void    print_ast(lst_ast *root);
-
+void			print_ast(t_lst_ast *root);
 
 #endif

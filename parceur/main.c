@@ -4,9 +4,9 @@
 //tester expansion : 	lst_lexer *head = lexeur("echo $HOME 'a$HOME' \"b$HOME\"", env);
 
 
-lst_ast	*create_ast(lst_lexer **liste)
+t_lst_ast	*create_ast(lst_lexer **liste)
 {
-	lst_ast	*head = find_pipe(liste);
+	t_lst_ast	*head = find_pipe(liste);
 	free_lexer(*liste);
 	return (head);
 }
@@ -18,9 +18,9 @@ int		main(int argc, char **argv, char **envp)
 	t_env *env;
 
 	env = envp_list(envp);
-	lst_lexer *head = lexeur("echo $HOME 'a$HOME' \"b$HOME\" $?", env);
+	lst_lexer *head = lexeur("echo 'coucou' > text.txt | echo hi >", env);
 	
-	lst_ast *ast = create_ast(&head);
+	t_lst_ast *ast = create_ast(&head);
 	
 	print_ast(ast);
 }

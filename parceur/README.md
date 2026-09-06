@@ -1,7 +1,5 @@
 /* A REPASSER AVANT FINAL
 -norminette
--refaire makefile
--is_venv ne doit pas commencer par un chiffre
 */
 
 /* NORMINETTE
@@ -10,6 +8,15 @@
     ! Ne pas utiliser ce glich si l'adresse de ptr doit rester modifiable !
 */
 
+/*TEST
+echo 'coucou' > text.txt
+echo hello | cat
+ls > out.txt | wc -l
+cat f | grep a | wc -l
+cat < in.txt | grep x > res.txt	
+> out.txt
+echo hi >
+*/
 *********************************************************
 
     /*  PRINT LE LEXER  */
@@ -84,7 +91,7 @@ Pour voir le rendu de l'ast, inclure le main et le fichier ci-dessous:
 int main(void)
 {
     lst_lexer *head = lexeur("echo hello | cat -n > file.txt");
-	lst_ast	*ast = create_ast(&head);
+	t_lst_ast	*ast = create_ast(&head);
 	print_ast(ast);	
 }
 ```
@@ -101,7 +108,7 @@ static const char *node_type_str(node_type type)
     return "TOK_EOF";
 }
 
-static void print_ast_rec(lst_ast *node, int depth, int is_right)
+static void print_ast_rec(t_lst_ast *node, int depth, int is_right)
 {
     int i;
 
@@ -142,7 +149,7 @@ static void print_ast_rec(lst_ast *node, int depth, int is_right)
     }
 }
 
-void    print_ast(lst_ast *root)
+void    print_ast(t_lst_ast *root)
 {
     if (!root)
     {

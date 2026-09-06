@@ -37,7 +37,7 @@ void	free_tab(char **tab)
 	free(tab);
 }
 
-void	free_parceur(lst_ast *head)
+void	free_parceur(t_lst_ast *head)
 {
 	if (!head)
 		return ;
@@ -52,10 +52,10 @@ void	free_parceur(lst_ast *head)
 	free(head);
 }
 
-lst_ast	*find_cmd(lst_lexer **head)
+t_lst_ast	*find_cmd(lst_lexer **head)
 {
 	lst_lexer		*current = *head;
-	lst_ast	*node_ast = ft_calloc(sizeof(lst_ast), 1);
+	t_lst_ast	*node_ast = ft_calloc(sizeof(t_lst_ast), 1);
 	char	**tokens;
 	int		i = 0;
 	int		j = 0;
@@ -83,33 +83,35 @@ lst_ast	*find_cmd(lst_lexer **head)
 	return (node_ast);
 }
 
-lst_ast	*find_red(lst_lexer **head)
+t_lst_ast	*find_red(lst_lexer **head)
 {
-	lst_ast	*node_left;
-	lst_ast	*node_ast = ft_calloc(sizeof(lst_ast), 1);
+	t_lst_ast	*node_left;
+	t_lst_ast	*node_ast;
 
 	node_left = find_cmd(head);
 	if ((*head)->type == TOK_RED_BR || (*head)->type == TOK_RED_BL || (*head)->type == TOK_RED_BRS || (*head)->type == TOK_RED_BLS)
 	{
-		node_ast->tokens = NULL;
-		if ((*head)->value)
-			node_ast->red_file = ft_strdup((*head)->value);
+		node_ast = ft_calloc(sizeof(t_lst_ast), 1);
+		if (!node_ast)
+			return (free_parceur(node_left), NULL);
 		node_ast->node_type = N_RED;
 		node_ast->token_type = (*head)->type;
-		(*head) = (*head)->next;
 		node_ast->left = node_left;
 		(*head) = (*head)->next;
-		return (node_left);
+		if (*head && (*head)->type == TOK_W)
+		{
+			node_ast->red_file = ft_strdup((*head)->value);
+			(*head) = (*head)->next;
+		}
+		return (node_ast);
 	}
-	else
-		return (free_parceur(node_ast), node_left);
-	return (free_parceur(node_ast), node_left);
+	return (node_left);
 }
 
-lst_ast	*find_pipe(lst_lexer **head)
+t_lst_ast	*find_pipe(lst_lexer **head)
 {
-	lst_ast	*node_left;
-	lst_ast	* const node_ast = ft_calloc(sizeof(lst_ast), 1);
+	t_lst_ast	*node_left;
+	t_lst_ast	* const node_ast = ft_calloc(sizeof(t_lst_ast), 1);
 
 	node_left = find_red(head);
 	if ((*head)->type == TOK_PIPE)
@@ -126,4 +128,3 @@ lst_ast	*find_pipe(lst_lexer **head)
 		return (free_parceur(node_ast), node_left); 
 	return (node_ast);
 }
-

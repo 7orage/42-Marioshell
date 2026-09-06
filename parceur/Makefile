@@ -7,7 +7,7 @@ CFLAGS  = -Wall -Wextra -Werror -g3
 LIBFT_DIR   = ../includes/libft
 LIBFT       = $(LIBFT_DIR)/libft.a
 
-SRC     = main.c istype.c lexer.c parceur.c print_ast.c envp_list.c expand.c
+SRC     = main.c istype.c lexer.c parceur.c print_ast.c envp_list.c expand.c lexer_lst_utils.c
 OBJ_DIR = obj
 OBJ     = $(SRC:%.c=$(OBJ_DIR)/%.o)
 
@@ -20,6 +20,9 @@ $(LIBFT):
 
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
+	@echo "*******************"
+	@echo "  PARCING COMPILE  "
+	@echo "*******************"
 
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(OBJ_DIR)
