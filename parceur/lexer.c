@@ -1,4 +1,4 @@
-#include"lexeur.h"
+#include "lexeur.h"
 
 /*
 add_red		-> ADD A NODE WITH TOK_RED_XX TYPE
@@ -6,7 +6,7 @@ tokenize	-> WALK THE INPUT, ONE TOK A THE TIME
 lexer		-> MANAGE THE CREATION OF THE LST
 */
 
-static void	add_red(char *input, int *i, lst_lexer **head)
+static void	add_red(char *input, int *i, t_lst_lexer **head)
 {
 	if (input[*i] == '>')
 	{
@@ -32,7 +32,7 @@ static void	add_red(char *input, int *i, lst_lexer **head)
 	}
 }
 
-static int	tokenize(char *input, lst_lexer **head, t_env *env)
+static int	tokenize(char *input, t_lst_lexer **head, t_env *env)
 {
 	char	*word;
 	int		i;
@@ -60,9 +60,9 @@ static int	tokenize(char *input, lst_lexer **head, t_env *env)
 	return (1);
 }
 
-lst_lexer	*lexer(char *input, t_env *env)
+t_lst_lexer	*lexer(char *input, t_env *env)
 {
-	lst_lexer	*head;
+	t_lst_lexer	*head;
 
 	head = NULL;
 	if (!is_quotes_closed(input))

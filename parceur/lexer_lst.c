@@ -5,9 +5,9 @@ free_lexer		-> FREE THE LEXER LIST
 add_node_lexer	-> ADD NEW NODE IN THE LIST
 */
 
-void	free_lexer(lst_lexer *head)
+void	free_lexer(t_lst_lexer *head)
 {
-	lst_lexer	*ptr;
+	t_lst_lexer	*ptr;
 
 	while (head)
 	{
@@ -19,12 +19,12 @@ void	free_lexer(lst_lexer *head)
 	}
 }
 
-int	add_node_lexer(lst_lexer **liste, token_type type, char *token)
+int	add_node_lexer(t_lst_lexer **liste, token_type type, char *token)
 {
-	lst_lexer	*new;
-	lst_lexer	*ptr;
+	t_lst_lexer	*new;
+	t_lst_lexer	*ptr;
 
-	new = malloc(sizeof(lst_lexer));
+	new = malloc(sizeof(t_lst_lexer));
 	if (!new)
 		return (free(new), 0);
 	new->type = type;
