@@ -47,6 +47,7 @@ int			is_delim(char c);
 int			ft_isspace(char c);
 
 // expand.c
-int		expand(char *raw, char *buffer, int *j, t_env *env);
-char	*env_get(t_env *env, char *name, int len);
+int			expand(char *raw, char *buffer, int *j, t_env *env);
+char		*env_get(t_env *env, char *name, int len);
+
 # endif
