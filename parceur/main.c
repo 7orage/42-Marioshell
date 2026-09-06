@@ -18,7 +18,7 @@ int		main(int argc, char **argv, char **envp)
 	t_env *env;
 
 	env = envp_list(envp);
-	lst_lexer *head = lexeur("echo 'coucou' > text.txt | echo hi >", env);
+	lst_lexer *head = lexer("echo 'coucou' > text.txt | echo hi >", env);
 	
 	t_lst_ast *ast = create_ast(&head);
 	

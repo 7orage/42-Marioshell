@@ -1,6 +1,10 @@
 #include "lexeur.h"
 
-// FREE THE LIST
+/*
+free_lexer		-> FREE THE LEXER LIST
+add_node_lexer	-> ADD NEW NODE IN THE LIST
+*/
+
 void	free_lexer(lst_lexer *head)
 {
 	lst_lexer	*ptr;
@@ -15,7 +19,6 @@ void	free_lexer(lst_lexer *head)
 	}
 }
 
-// ADD A NEW TOKEN TO THE LISTE
 int	add_node_lexer(lst_lexer **liste, token_type type, char *token)
 {
 	lst_lexer	*new;

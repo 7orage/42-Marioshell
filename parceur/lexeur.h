@@ -44,7 +44,7 @@ int		check_quotes(char *input);
 void	free_lexer(lst_lexer *head);
 int     add_node_lexer(lst_lexer **liste, token_type type, char *token);
 char    *cut(char *raw_tok, t_env *env, int *i);
-lst_lexer    *lexeur(char *input, t_env *env);
+lst_lexer    *lexer(char *input, t_env *env);
 
 // istype
 int	is_delim(char c);
