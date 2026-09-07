@@ -5,21 +5,23 @@
 
 t_lst_ast	*create_ast(t_lst_lexer **liste)
 {
-	t_lst_ast	*head = find_pipe(liste);
+	t_lst_ast	*head;
+
+	head = find_pipe(liste);
 	free_lexer(*liste);
 	return (head);
 }
 
 int		main(int argc, char **argv, char **envp)
 {
-	(void)argv;
-    (void)argc;
-	t_env *env;
+	t_env		*env;
+	t_lst_lexer	*head;
+	t_lst_ast	*ast;
 
+	(void)argv;
+	(void)argc;
 	env = envp_list(envp);
-	t_lst_lexer *head = lexer("echo 'coucou' > text.txt | echo hi >", env);
-	
-	t_lst_ast *ast = create_ast(&head);
-	
+	head = lexer("echo 'coucou' > text.txt | echo hi >", env);
+	ast = create_ast(&head);
 	print_ast(ast);
 }
