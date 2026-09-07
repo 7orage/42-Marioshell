@@ -1,7 +1,6 @@
 #ifndef ENVP_LIST_H
 # define ENVP_LIST_H
 
-
 typedef struct s_env
 {
 	char			*name;

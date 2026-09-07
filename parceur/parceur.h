@@ -2,7 +2,6 @@
 # define PARCEUR_H
 
 # include "lexeur.h"
-# include "envp_list.h"
 
 typedef enum e_node_type
 {

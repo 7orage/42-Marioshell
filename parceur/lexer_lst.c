@@ -19,7 +19,7 @@ void	free_lexer(t_lst_lexer *head)
 	}
 }
 
-int	add_node_lexer(t_lst_lexer **liste, token_type type, char *token)
+int	add_node_lexer(t_lst_lexer **liste, t_token_type type, char *token)
 {
 	t_lst_lexer	*new;
 	t_lst_lexer	*ptr;
