@@ -1,63 +1,58 @@
-
 .SILENT:
-NAME = minishell
+NAME	= minishell
 
-SRC = main.c 
-OBJ_DIR = obj
-OBJ = $(addprefix $(OBJ_DIR)/,$(SRC:.c=.o))
-
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
-RFLAGS = -lreadline
+CC		= gcc
+CFLAGS	= -Wall -Wextra -Werror
+RFLAGS	= -lreadline
 MAKEFLAGS += --no-print-directory
 
+YELLOW	= \033[1;33m
+RED		= \033[1;31m
+RESET	= \033[0m
 
-LIBFT_DIR = includes/libft
-FT_PRINTF_DIR = includes/ft_printf
-NEXT_LINE_DIR   = includes/get_next_line
+LIBFT_DIR	= includes/libft
+INCLUDES	= -Iincludes -I$(LIBFT_DIR)
 
+LIBFT		= $(LIBFT_DIR)/libft.a
+UTILS		= utils/utils.a
+PARSEUR		= parseur/parseur.a
+SIGNALS		= signals/signals.a
+BUILTINS	= builtins/builtins.a
+EXEC		= exec/exec.a
 
-LIBFT     = $(LIBFT_DIR)/libft.a
-FT_PRINTF       = $(FT_PRINTF_DIR)/libftprintf.a
-NEXT_LINE	= $(NEXT_LINE_DIR)/get_next_line.a
+# Left to right, from the most dependent to the least: the linker reads
+# a static archive only once, so a user must come before its provider.
+# exec -> builtins -> parseur -> signals -> utils -> libft
+LIBS	= $(EXEC) $(BUILTINS) $(PARSEUR) $(SIGNALS) $(UTILS) $(LIBFT)
+SUBDIRS	= $(LIBFT_DIR) utils parseur signals builtins exec
 
+SRC		= main.c
+OBJ_DIR	= obj
+OBJ		= $(addprefix $(OBJ_DIR)/,$(SRC:.c=.o))
 
-all: $(NAME)
+all: libs $(NAME)
 
-$(LIBFT):
-	@make -C $(LIBFT_DIR) --no-print-directory
+libs:
+	for dir in $(SUBDIRS); do $(MAKE) -C $$dir || exit 1; done
 
-$(FT_PRINTF):
-	@make -C $(FT_PRINTF_DIR) --no-print-directory
-
-$(NEXT_LINE):
-	@make -C $(NEXT_LINE_DIR) --no-print-directory
-
-
-$(NAME): $(OBJ) $(LIBFT) $(FT_PRINTF) $(NEXT_LINE)
-	@$(CC) $(CFLAGS) $(OBJ) $(RFLAGS) $(FT_PRINTF) $(NEXT_LINE) $(LIBFT) -o $(NAME)
-	@echo "*******************"
-	@echo "  PROJET COMPILE   "
-	@echo "*******************"
+$(NAME): $(OBJ) $(LIBS)
+	$(CC) $(CFLAGS) $(OBJ) $(LIBS) $(RFLAGS) -o $(NAME)
+	@printf "$(YELLOW)%s\n%s\n%s\n$(RESET)" "      ooooooooooooooo" "      oooooo    oooooo" "     ooo           ooo"
+	@printf "$(RED)%s$(RESET)\n" "    m a r i o s h e l l"
 
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -I. -I$(LIBFT_DIR) -I$(FT_PRINTF_DIR) -I$(NEXT_LINE_DIR) -c $< -o $@
-
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	@make -C $(LIBFT_DIR) clean
-	@make -C $(FT_PRINTF_DIR) clean
-	@make -C $(NEXT_LINE_DIR) clean
-	rm -f $(OBJ)
+	for dir in $(SUBDIRS); do $(MAKE) -C $$dir clean; done
 	rm -rf $(OBJ_DIR)
 
-fclean: clean
-	@make -C $(LIBFT_DIR) fclean
-	@make -C $(FT_PRINTF_DIR) fclean
-	@make -C $(NEXT_LINE_DIR) fclean
+fclean:
+	for dir in $(SUBDIRS); do $(MAKE) -C $$dir fclean; done
+	rm -rf $(OBJ_DIR)
 	rm -f $(NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all libs clean fclean re

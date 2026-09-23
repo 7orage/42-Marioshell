@@ -1,0 +1,7 @@
+obj/
+minishell
+*.o
+*.a
+
+*.swp
+.DS_Store
