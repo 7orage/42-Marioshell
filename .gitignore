@@ -5,3 +5,4 @@ minishell
 
 *.swp
 .DS_Store
+*.sh
