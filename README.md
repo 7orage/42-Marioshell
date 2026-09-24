@@ -2,7 +2,9 @@ _This project has been created as part of the 42 curriculum by lheteau, anmoussa
 _We are the 22 June 2026._
 
 # Minishell
-![Previsualisation of the prompt and the build animation](XXXXXXXXXXXXXXXXXX)
+https://github.com/user-attachments/assets/02034ee5-d03d-45c9-90ff-2e19ad5ed273
+
+
 ### Table of contents
 ***
 1. _Description_
