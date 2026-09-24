@@ -7,7 +7,7 @@ shell_loop	-> MAIN LOOP OF THE SHELL
 main		-> SET UP THE ENVIRONMENT AND START THE LOOP
 */
 
-static char	*prompt_str(t_env *env)
+/*static char	*prompt_str(t_env *env)
 {
 	char	*code;
 
@@ -15,7 +15,7 @@ static char	*prompt_str(t_env *env)
 	if (code && ft_strncmp(code, "0", 2))
 		return (PROMPT_KO);
 	return (PROMPT_OK);
-}
+}*/
 
 static void	run_line(char *line, t_env *env)
 {
@@ -51,13 +51,13 @@ static void	shell_loop(t_env *env)
 	while (1)
 	{
 		sig_prompt();
-		line = readline(prompt_str(env));
+		line = readline("minishell$ ");
 		if (g_signal == SIGINT)
 			set_status(env, 130);
 		g_signal = 0;
 		if (!line)
 		{
-			ft_putendl_fd("exit", 2);
+			ft_putendl_fd("exit", 1);
 			return ;
 		}
 		if (*line)

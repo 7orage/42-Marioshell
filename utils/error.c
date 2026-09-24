@@ -8,17 +8,24 @@ err_cmd		-> ERROR ON A COMMAND, RETURNS THE WANTED EXIT CODE
 
 int	err_sys(char *who)
 {
+	int	errb;
+
+	errb = errno;
 	ft_putstr_fd("minishell: ", 2);
+	errno = errb;
 	perror(who);
 	return (1);
 }
 
 int	err_file(char *file)
 {
+	char	*strerr;
+
+	strerr = strerror(errno);
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(file, 2);
 	ft_putstr_fd(": ", 2);
-	ft_putendl_fd(strerror(errno), 2);
+	ft_putendl_fd(strerr, 2);
 	return (0);
 }
 

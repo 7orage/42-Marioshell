@@ -7,8 +7,9 @@ exec_cmd	-> BUILTIN OR EXTERN COMMAND
 
 static int	run_execve(char **argv, t_env *env)
 {
-	char	**envp;
-	char	*path;
+	char		**envp;
+	char		*path;
+	struct stat	s;
 
 	path = find_path(argv[0], env);
 	if (!path)
@@ -19,8 +20,13 @@ static int	run_execve(char **argv, t_env *env)
 	execve(path, argv, envp);
 	free(path);
 	free_tab(envp);
-	if (errno == EACCES || errno == EISDIR)
-		exit(err_cmd(argv[0], strerror(errno), 126));
+	if (stat(argv[0], &s) == 0)
+	{
+		if (s.st_mode & __S_IFDIR)
+			exit(err_cmd(argv[0], "Is a directory", 126));
+	}
+	if (errno == EACCES)
+		exit(err_cmd(argv[0], "Permission denied", 126));
 	exit(err_cmd(argv[0], strerror(errno), 127));
 }
 

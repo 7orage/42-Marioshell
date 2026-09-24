@@ -36,7 +36,7 @@ int	ft_exit(char **argv, t_env *env)
 	int	code;
 
 	code = 0;
-	ft_putendl_fd("exit", 2);
+	ft_putendl_fd("exit", 1);
 	if (!argv[1])
 		code = ft_atoi(find_env(env, "?", 1));
 	else if (!is_number(argv[1]))
@@ -45,7 +45,7 @@ int	ft_exit(char **argv, t_env *env)
 		code = 2;
 	}
 	else if (argv[2])
-		return (err_cmd("exit", "too many arguments", 1));
+		return (err_cmd("exit", "too many arguments", 2));
 	else
 		code = ft_atoi(argv[1]);
 	free_list(env);
