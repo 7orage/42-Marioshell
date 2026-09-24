@@ -1,7 +1,12 @@
 _This project has been created as part of the 42 curriculum by lheteau, anmoussa._  
 _We are the 22 June 2026._
 
-# Minishell
+# $\color{#E52521}\textbf{Mario}\color{#43B047}\textbf{shell}$
+![](https://img.shields.io/badge/🍄_Marioshell-E52521?style=for-the-badge&logoColor=white)
+![](https://img.shields.io/badge/C-A8B9CC?style=for-the-badge&logo=c&logoColor=white)
+![](https://img.shields.io/badge/norminette-passing-43B047?style=for-the-badge)
+![](https://img.shields.io/badge/leaks-none-FBD000?style=for-the-badge)  
+
 https://github.com/user-attachments/assets/02034ee5-d03d-45c9-90ff-2e19ad5ed273
 
 
