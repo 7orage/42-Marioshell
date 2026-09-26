@@ -18,11 +18,11 @@ int			run_in_place(t_lst_ast *node, t_env *env);
 int			collect_heredocs(t_lst_ast *ast, t_env *env);
 
 //exec/exec_cmd.c
-int			exec_cmd(t_lst_ast *cmd, t_env *env);
+int			exec_cmd(t_lst_ast *cmd, t_env *env, t_lst_ast *full_ast);
 
 //exec/exec_red.c
 t_lst_ast	*deepest_cmd(t_lst_ast *node);
-int			apply_reds(t_lst_ast *node);
+int			apply_reds(t_lst_ast *node, t_env *env);
 int			run_saved(t_lst_ast *node, t_env *env);
 
 //exec/exec_path.c

@@ -14,7 +14,20 @@ t_lst_ast	*deepest_cmd(t_lst_ast *node)
 	return (node);
 }
 
-static int	open_red(t_lst_ast *node)
+static int	err_file_red(t_lst_ast *node)
+{
+	char	*strerr;
+
+	strerr = strerror(errno);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(node->red_file, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putendl_fd(strerr, 2);
+	free_parseur(node);
+	return (0);
+}
+
+static int	open_red(t_lst_ast *node, t_env *env)
 {
 	int	fd;
 
@@ -29,7 +42,7 @@ static int	open_red(t_lst_ast *node)
 	else
 		fd = open(node->red_file, O_RDONLY);
 	if (fd < 0)
-		return (err_file(node->red_file));
+		return (free_list(env), err_file_red(node));
 	if (node->token_type == TOK_RED_BL || node->token_type == TOK_RED_BLS)
 		dup2(fd, STDIN_FILENO);
 	else
@@ -37,13 +50,13 @@ static int	open_red(t_lst_ast *node)
 	return (close(fd), 1);
 }
 
-int	apply_reds(t_lst_ast *node)
+int	apply_reds(t_lst_ast *node, t_env *env)
 {
 	if (!node || node->node_type != N_RED)
 		return (1);
-	if (!apply_reds(node->left))
+	if (!apply_reds(node->left, env))
 		return (0);
-	return (open_red(node));
+	return (open_red(node, env));
 }
 
 int	run_saved(t_lst_ast *node, t_env *env)

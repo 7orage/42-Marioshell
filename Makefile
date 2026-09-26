@@ -2,7 +2,7 @@
 NAME	= minishell
 
 CC		= gcc
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror -g3
 RFLAGS	= -lreadline
 MAKEFLAGS += --no-print-directory
 
@@ -37,7 +37,7 @@ libs:
 
 $(NAME): $(OBJ) $(LIBS)
 	$(CC) $(CFLAGS) $(OBJ) $(LIBS) $(RFLAGS) -o $(NAME)
-	@printf "$(YELLOW)%s\n%s\n%s\n$(RESET)" "      ooooooooooooooo" "      oooooo    oooooo" "     ooo           ooo"
+	@printf "$(YELLOW)%s\n%s\n%s\n$(RESET)" "      ooooooooooooooo" "     oooooo     oooooo" "     ooo           ooo"
 	@printf "$(RED)%s$(RESET)\n" "    m a r i o s h e l l"
 
 $(OBJ_DIR)/%.o: %.c

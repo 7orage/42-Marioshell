@@ -18,7 +18,7 @@ int	is_builtin(char *cmd)
 	return (!ft_strncmp(cmd, "exit", 5));
 }
 
-int	run_builtin(char **argv, t_env *env)
+int	run_builtin(char **argv, t_env *env, t_lst_ast *full_ast)
 {
 	if (!ft_strncmp(argv[0], "echo", 5))
 		return (ft_echo(argv));
@@ -32,5 +32,5 @@ int	run_builtin(char **argv, t_env *env)
 		return (ft_export(argv, env));
 	if (!ft_strncmp(argv[0], "unset", 6))
 		return (ft_unset(argv, env));
-	return (ft_exit(argv, env));
+	return (ft_exit(argv, env, full_ast));
 }

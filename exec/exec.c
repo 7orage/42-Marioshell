@@ -44,9 +44,12 @@ static int	exec_pipe(t_lst_ast *ast, t_env *env)
 
 int	run_in_place(t_lst_ast *node, t_env *env)
 {
-	if (!apply_reds(node))
+	t_lst_ast	*temp;
+
+	temp = node;
+	if (!apply_reds(node, env))
 		return (1);
-	return (exec_cmd(deepest_cmd(node), env));
+	return (exec_cmd(deepest_cmd(node), env, temp));
 }
 
 static int	exec_branch(t_lst_ast *node, t_env *env, int forked)

@@ -6,7 +6,7 @@
 
 //builtins/dispatch.c
 int		is_builtin(char *cmd);
-int		run_builtin(char **argv, t_env *env);
+int		run_builtin(char **argv, t_env *env, t_lst_ast *full_ast);
 
 //builtins/env_edit.c
 int		set_env(t_env *env, char *name, char *content);
@@ -34,6 +34,6 @@ void	export_print(t_env *env);
 int		ft_unset(char **argv, t_env *env);
 
 //builtins/ft_exit.c
-int		ft_exit(char **argv, t_env *env);
+int		ft_exit(char **argv, t_env *env, t_lst_ast *full_ast);
 
 #endif

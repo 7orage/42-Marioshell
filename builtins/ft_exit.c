@@ -31,7 +31,7 @@ static void	exit_error(char *arg)
 	ft_putendl_fd(": numeric argument required", 2);
 }
 
-int	ft_exit(char **argv, t_env *env)
+int	ft_exit(char **argv, t_env *env, t_lst_ast *full_ast)
 {
 	int	code;
 
@@ -49,6 +49,7 @@ int	ft_exit(char **argv, t_env *env)
 	else
 		code = ft_atoi(argv[1]);
 	free_list(env);
+	free_parseur(full_ast);
 	rl_clear_history();
 	exit(code & 255);
 }
