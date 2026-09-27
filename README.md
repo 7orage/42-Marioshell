@@ -152,6 +152,32 @@ A header includes what *its own declarations* need, nothing more — which is wh
 ./minishell
 ```
 
+• Create a file named "ignore" and add this in it to leave out readline errors :
+```
+{
+    ignore_libreadline_leaks
+    Memcheck:Leak
+    ...
+    obj:*/libreadline.so.*
+}
+{
+    ignore_bin_leaks
+    Memcheck:Leak
+    obj:/bin/*
+}
+{
+    ignore_usr_bin_leaks
+    Memcheck:Leak
+    ...
+    obj:/usr/bin/*
+}
+```
+
+• This command will use that "ignore" file via valgrind :
+```
+valgrind --suppressions=ignore --leak-check=full --show-leak-kinds=all --track-origins=yes --trace-children=yes --track-fds=yes -s ./minishell
+```
+
 The prompt is **green** when the last command succeeded and **red** when it failed. `Ctrl-D` exits, `Ctrl-C` gives a fresh prompt, `Ctrl-\` does nothing.
 
 ***

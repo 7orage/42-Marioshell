@@ -1,10 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signals.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anmoussa <anmoussa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/27 01:55:07 by anmoussa          #+#    #+#             */
+/*   Updated: 2026/09/27 01:55:08 by anmoussa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
 hand_sigint	-> CTRL-C ON THE PROMPT: NEW LINE AND NEW PROMPT
 sig_prompt	-> HANDLERS WHILE WAITING FOR A LINE
 sig_exec	-> THE SHELL GOES DEAF WHILE A CHILD IS RUNNING
-sig_child	-> THE CHILD GOES BACK TO THE DEFAULT BEHAVIOUR
+sig_child	-> THE CHILD GOES BACK TO THE DEFAULT BEHAVIOUR. SIGPIPE IS IGNORED
+		   SO A BUILTIN WRITING IN A DEAD PIPE STILL LEAVES THROUGH
+		   child_exit AND FREES EVERYTHING (run_execve PUTS IT BACK)
 sig_msg		-> WHAT THE SHELL PRINTS WHEN A LINE ENDED ON A SIGNAL
 
 g_signal only ever holds a signal number.
@@ -37,6 +51,7 @@ void	sig_child(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
+	signal(SIGPIPE, SIG_IGN);
 }
 
 void	sig_msg(int status)

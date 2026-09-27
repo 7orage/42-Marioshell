@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_red.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anmoussa <anmoussa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/27 01:56:10 by anmoussa          #+#    #+#             */
+/*   Updated: 2026/09/27 01:56:11 by anmoussa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
@@ -5,6 +17,7 @@ deepest_cmd	-> GO DOWN THE RED CHAIN UNTIL THE COMMAND
 open_red	-> OPEN A FILE AND PLUG IT ON 0 OR 1
 apply_reds	-> APPLY FROM THE DEEPEST RED TO THE HIGHEST ONE
 run_saved	-> SAVE 0 AND 1, RUN IN THE SHELL, PUT THEM BACK
+		   (NOTHING TO SAVE WHEN THERE IS NO REDIRECTION)
 */
 
 t_lst_ast	*deepest_cmd(t_lst_ast *node)
@@ -14,20 +27,7 @@ t_lst_ast	*deepest_cmd(t_lst_ast *node)
 	return (node);
 }
 
-static int	err_file_red(t_lst_ast *node)
-{
-	char	*strerr;
-
-	strerr = strerror(errno);
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(node->red_file, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putendl_fd(strerr, 2);
-	free_parseur(node);
-	return (0);
-}
-
-static int	open_red(t_lst_ast *node, t_env *env)
+static int	open_red(t_lst_ast *node)
 {
 	int	fd;
 
@@ -42,21 +42,24 @@ static int	open_red(t_lst_ast *node, t_env *env)
 	else
 		fd = open(node->red_file, O_RDONLY);
 	if (fd < 0)
-		return (free_list(env), err_file_red(node));
+		return (err_file(node->red_file));
 	if (node->token_type == TOK_RED_BL || node->token_type == TOK_RED_BLS)
 		dup2(fd, STDIN_FILENO);
 	else
 		dup2(fd, STDOUT_FILENO);
-	return (close(fd), 1);
+	close(fd);
+	if (node->token_type == TOK_RED_BLS)
+		node->hd_fd = -1;
+	return (1);
 }
 
-int	apply_reds(t_lst_ast *node, t_env *env)
+int	apply_reds(t_lst_ast *node)
 {
 	if (!node || node->node_type != N_RED)
 		return (1);
-	if (!apply_reds(node->left, env))
+	if (!apply_reds(node->left))
 		return (0);
-	return (open_red(node, env));
+	return (open_red(node));
 }
 
 int	run_saved(t_lst_ast *node, t_env *env)
@@ -64,10 +67,18 @@ int	run_saved(t_lst_ast *node, t_env *env)
 	int	save[2];
 	int	status;
 
+	if (node->node_type != N_RED)
+		return (run_in_place(node, env));
 	save[0] = dup(STDIN_FILENO);
 	save[1] = dup(STDOUT_FILENO);
 	if (save[0] < 0 || save[1] < 0)
+	{
+		if (save[0] >= 0)
+			close(save[0]);
+		if (save[1] >= 0)
+			close(save[1]);
 		return (err_sys("dup"));
+	}
 	status = run_in_place(node, env);
 	dup2(save[0], STDIN_FILENO);
 	dup2(save[1], STDOUT_FILENO);

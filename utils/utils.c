@@ -1,8 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anmoussa <anmoussa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/27 01:57:16 by anmoussa          #+#    #+#             */
+/*   Updated: 2026/09/27 01:57:17 by anmoussa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
 free_tab		-> FREE A NULL TERMINATED ARRAY OF STRINGS
 is_identifier	-> IS THIS A VALID SHELL VARIABLE NAME ?
+close_std		-> CLOSE 0 1 2 RIGHT BEFORE LEAVING: dup2 MAY HAVE REOPENED THEM,
+				   valgrind --track-fds WOULD REPORT THEM
 */
 
 void	free_tab(char **tab)
@@ -37,4 +51,11 @@ int	is_identifier(char *name)
 		i++;
 	}
 	return (1);
+}
+
+void	close_std(void)
+{
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	close(STDERR_FILENO);
 }

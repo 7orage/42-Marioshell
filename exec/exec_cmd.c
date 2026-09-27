@@ -1,18 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_cmd.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anmoussa <anmoussa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/27 01:56:05 by anmoussa          #+#    #+#             */
+/*   Updated: 2026/09/27 01:56:06 by anmoussa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
-run_execve	-> REPLACE THE PROCESS BY THE COMMAND, NEVER COMES BACK
+clean		-> FREE EVERYTHING, PRINT THE ERROR, GIVE BACK THE EXIT CODE
+run_execve	-> REPLACE THE PROCESS BY THE COMMAND, NEVER COMES BACK.
+		   SIGPIPE GOES BACK TO DEFAULT: AN IGNORED SIGNAL SURVIVES execve
 exec_cmd	-> BUILTIN OR EXTERN COMMAND
 */
-
-/*static int	err_cmd_ve(char *cmd, char *msg, int code)
-{
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putendl_fd(msg, 2);
-	return (code);
-}*/
 
 static int	clean(t_env *env, t_lst_ast *ast, char **argv, int n)
 {
@@ -27,7 +32,9 @@ static int	clean(t_env *env, t_lst_ast *ast, char **argv, int n)
 		n = err_cmd(argv[0], "Permission denied", 126);
 	else if (n == 4)
 		n = err_cmd(argv[0], strerror(errno), 127);
-	free_parseur(ast);
+	free_parseur(ast->root);
+	rl_clear_history();
+	close_std();
 	return (n);
 }
 
@@ -43,14 +50,12 @@ static int	run_execve(char **argv, t_env *env, t_lst_ast *full_ast)
 	envp = env_to_tab(env);
 	if (!envp)
 		exit(clean(env, full_ast, argv, 1));
+	signal(SIGPIPE, SIG_DFL);
 	execve(path, argv, envp);
 	free(path);
 	free_tab(envp);
-	if (stat(argv[0], &s) == 0)
-	{
-		if (s.st_mode & __S_IFDIR)
-			exit(clean(env, full_ast, argv, 2));
-	}
+	if (stat(argv[0], &s) == 0 && S_ISDIR(s.st_mode))
+		exit(clean(env, full_ast, argv, 2));
 	if (errno == EACCES)
 		exit(clean(env, full_ast, argv, 3));
 	exit(clean(env, full_ast, argv, 4));
@@ -59,7 +64,7 @@ static int	run_execve(char **argv, t_env *env, t_lst_ast *full_ast)
 int	exec_cmd(t_lst_ast *cmd, t_env *env, t_lst_ast *full_ast)
 {
 	if (!cmd || !cmd->tokens || !cmd->tokens[0])
-		return (free_list(env), free_parseur(full_ast), 0);
+		return (0);
 	if (is_builtin(cmd->tokens[0]))
 		return (run_builtin(cmd->tokens, env, full_ast));
 	return (run_execve(cmd->tokens, env, full_ast));

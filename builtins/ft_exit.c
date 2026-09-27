@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anmoussa <anmoussa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/27 01:56:32 by anmoussa          #+#    #+#             */
+/*   Updated: 2026/09/27 01:56:34 by anmoussa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
@@ -39,17 +51,18 @@ int	ft_exit(char **argv, t_env *env, t_lst_ast *full_ast)
 	ft_putendl_fd("exit", 1);
 	if (!argv[1])
 		code = ft_atoi(find_env(env, "?", 1));
+	else if (argv[2])
+		return (err_cmd("exit", "too many arguments", 2));
 	else if (!is_number(argv[1]))
 	{
 		exit_error(argv[1]);
 		code = 2;
 	}
-	else if (argv[2])
-		return (err_cmd("exit", "too many arguments", 2));
 	else
 		code = ft_atoi(argv[1]);
 	free_list(env);
-	free_parseur(full_ast);
+	free_parseur(full_ast->root);
 	rl_clear_history();
+	close_std();
 	exit(code & 255);
 }

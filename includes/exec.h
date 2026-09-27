@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anmoussa <anmoussa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/27 01:55:52 by anmoussa          #+#    #+#             */
+/*   Updated: 2026/09/27 01:55:53 by anmoussa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef EXEC_H
 # define EXEC_H
 
@@ -22,7 +34,7 @@ int			exec_cmd(t_lst_ast *cmd, t_env *env, t_lst_ast *full_ast);
 
 //exec/exec_red.c
 t_lst_ast	*deepest_cmd(t_lst_ast *node);
-int			apply_reds(t_lst_ast *node, t_env *env);
+int			apply_reds(t_lst_ast *node);
 int			run_saved(t_lst_ast *node, t_env *env);
 
 //exec/exec_path.c
@@ -32,5 +44,6 @@ char		**env_to_tab(t_env *env);
 //exec/exec_utils.c
 int			wait_status(pid_t pid);
 void		set_status(t_env *env, int code);
+void		child_exit(t_lst_ast *node, t_env *env, int status);
 
 #endif

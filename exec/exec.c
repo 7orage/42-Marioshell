@@ -1,23 +1,44 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anmoussa <anmoussa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/27 01:56:14 by anmoussa          #+#    #+#             */
+/*   Updated: 2026/09/27 01:56:15 by anmoussa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
-child_pipe	-> PLUG THE CHILD ON THE PIPE THEN RESTART THE RECURSION
+child_pipe	-> PLUG THE CHILD ON THE PIPE, CLOSE ITS SIBLING'S HEREDOCS,
+		   THEN RESTART THE RECURSION
 exec_pipe	-> ONE PIPE, TWO FORKS, ONE PER BRANCH
 run_in_place	-> REDIRECTIONS THEN COMMAND, IN THE CURRENT PROCESS
 exec_branch	-> WHO FORKS: BUILTIN IN THE SHELL, EXTERN IN A CHILD
 exec_ast	-> RECURSIVE SWITCH ON THE AST
 */
 
-static void	child_pipe(t_lst_ast *node, t_env *env, int *fd, int side)
+static void	child_pipe(t_lst_ast *ast, t_env *env, int *fd, int side)
 {
 	sig_child();
 	if (side == 1)
+	{
 		dup2(fd[1], STDOUT_FILENO);
+		close_hd(ast->right);
+	}
 	else
+	{
 		dup2(fd[0], STDIN_FILENO);
+		close_hd(ast->left);
+	}
 	close(fd[0]);
 	close(fd[1]);
-	exit(exec_ast(node, env, 1));
+	if (side == 1)
+		child_exit(ast, env, exec_ast(ast->left, env, 1));
+	child_exit(ast, env, exec_ast(ast->right, env, 1));
 }
 
 static int	exec_pipe(t_lst_ast *ast, t_env *env)
@@ -30,10 +51,10 @@ static int	exec_pipe(t_lst_ast *ast, t_env *env)
 	sig_exec();
 	pid[0] = fork();
 	if (pid[0] == 0)
-		child_pipe(ast->left, env, fd, 1);
+		child_pipe(ast, env, fd, 1);
 	pid[1] = fork();
 	if (pid[1] == 0)
-		child_pipe(ast->right, env, fd, 0);
+		child_pipe(ast, env, fd, 0);
 	close(fd[0]);
 	close(fd[1]);
 	if (pid[0] < 0 || pid[1] < 0)
@@ -44,12 +65,9 @@ static int	exec_pipe(t_lst_ast *ast, t_env *env)
 
 int	run_in_place(t_lst_ast *node, t_env *env)
 {
-	t_lst_ast	*temp;
-
-	temp = node;
-	if (!apply_reds(node, env))
+	if (!apply_reds(node))
 		return (1);
-	return (exec_cmd(deepest_cmd(node), env, temp));
+	return (exec_cmd(deepest_cmd(node), env, node));
 }
 
 static int	exec_branch(t_lst_ast *node, t_env *env, int forked)
@@ -69,7 +87,7 @@ static int	exec_branch(t_lst_ast *node, t_env *env, int forked)
 	if (pid == 0)
 	{
 		sig_child();
-		exit(run_in_place(node, env));
+		child_exit(node, env, run_in_place(node, env));
 	}
 	return (wait_status(pid));
 }

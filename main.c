@@ -1,8 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anmoussa <anmoussa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/27 01:55:03 by anmoussa          #+#    #+#             */
+/*   Updated: 2026/09/27 01:55:04 by anmoussa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
 prompt_str	-> GREEN PROMPT AFTER A SUCCESS, RED AFTER A FAILURE
-run_line	-> LEXER, AST, EXEC, THEN FREE EVERYTHING
+run_line	-> LEXER, AST, EXEC, THEN FREE EVERYTHING. THE LINE IS FREED AS
+		   SOON AS IT IS CUT INTO TOKENS, SO NO CHILD EVER INHERITS IT
 shell_loop	-> MAIN LOOP OF THE SHELL
 main		-> SET UP THE ENVIRONMENT AND START THE LOOP
 */
@@ -25,6 +38,7 @@ static void	run_line(char *line, t_env *env)
 	int			status;
 
 	head = lexer(line, env);
+	free(line);
 	if (!head)
 		return (set_status(env, 2));
 	ptr = head;
@@ -32,6 +46,7 @@ static void	run_line(char *line, t_env *env)
 	free_lexer(head);
 	if (!ast)
 		return ;
+	set_root(ast, ast);
 	if (!collect_heredocs(ast, env))
 	{
 		g_signal = 0;
@@ -65,7 +80,8 @@ static void	shell_loop(t_env *env)
 			add_history(line);
 			run_line(line, env);
 		}
-		free(line);
+		else
+			free(line);
 	}
 }
 
@@ -83,5 +99,6 @@ int	main(int argc, char **argv, char **envp)
 	status = ft_atoi(find_env(env, "?", 1));
 	rl_clear_history();
 	free_list(env);
+	close_std();
 	return (status);
 }
