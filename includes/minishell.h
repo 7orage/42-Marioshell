@@ -29,9 +29,9 @@
 # include "builtins.h"
 # include "exec.h"
 
-/*
+
 # define PROMPT_OK "\001\033[0;32m\002◉ marioshell$ \001\033[0m\002"
 # define PROMPT_KO "\001\033[0;31m\002◉ marioshell$ \001\033[0m\002"
-*/
+
 
 #endif
